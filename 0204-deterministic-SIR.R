@@ -10,16 +10,18 @@
 #'
 #' Arguments:
 #'
-#' - latest -- a data frame containing the latest susceptible, recovered and infected population count
-#'             (columns are 'susceptibles', 'recovereds' and 'infecteds')
+#' - latest -- a data frame containing the latest susceptible, recovered and infected population count, aswell as time
+#'             (columns are 'susceptibles', 'recovereds' , 'infecteds' and 'time')
 #'
 #' - transmission.rate -- the transmission rate
 #'
 #' - recovery.rate -- the recovery rate
+#' 
+#' - timestep -- time interval
 #'
 #' Returns:
 #'
-#' - a data.frame containing the updated susceptible, infected  and recovered population, as well as the timestep in weeks.
+#' - a data.frame containing the updated susceptible, infected  and recovered population, as well as the timestep.
 
 timestep_deterministic_SIR <- function(latest, transmission.rate, recovery.rate, timestep) {
   

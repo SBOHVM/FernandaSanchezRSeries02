@@ -11,7 +11,11 @@ library(RPiR)
 source("0204-deterministic-SIR.R")
 source("0203-deterministic-SIS.R")
 
-#' We are going to compare four Susceptible-Infected-Susceptible (SIR) models for E. coli O157 in cattle 
+#' We are going to compare Susceptible-Infected-Susceptible (SIR) models for foot-and-mouth disease (FMD) in farms with different R0. 
+#' And compare SIR and SIS models with the same R0. 
+#'
+#'
+#'SIR Model
 #'
 #' 1. Susceptible model
 ### <b>
@@ -31,11 +35,7 @@ source("0203-deterministic-SIS.R")
 ### </b>
 #'
 
-#'The same procedure will be done for simulation A, B, C and D. 
-#'We only change the ecoli.transmission rate and a default recovery rate of (1/3), therefore changing R0. 
-#'Timesteps with their start and end time are the same for all simulations. 
-#'
-#'
+
 #' Set up the simulation parameters, which will be the same for all simulations.
 
 # Starting population size
@@ -48,77 +48,73 @@ initial.infecteds <- 2
 initial.recovereds<-0
 initial.susceptibles <- num.farms-initial.infecteds-initial.recovereds
 
+#Set start and end time
+start.time <- 0
+end.time <- 30
 
-# Transmission and recovery rate of E. coli O157 for simulation A
+#Set timesteps to 0.5 weeks
+FMD.timesteps <-  0.2
+
+#' # Compare SIR and SIS models with the same R0 
+#' 
+#' ## SIR Model
+# Transmission and recovery rate of E. coli O157 for simulation.
 FMD.transmission <-2
 FMD.recovery <-1/2
-start.time <- 0
-end.time <- 50
 
-FMD.timesteps <-  0.5
-
-#R0 for simulation A. `r ecoli.transmission.a / ecoli.recovery.a`
+#R0 for simulation. 
 R0<- FMD.transmission / FMD.recovery
+R0
 
-
-#Inverted R0
+#Inverse R0
 1/R0
 
-## Data frame for cattle population in population A
-farm.df<- data.frame(time=start.time, 
+# Data frame for farm
+farm.df.SIR.1<- data.frame(time=start.time, 
                      susceptibles = initial.susceptibles, 
                      infecteds=initial.infecteds,
                      recovereds=initial.recovereds)
 
-farm.df
+farm.df.SIR.1
 
-#'Function for SIR model to calculate population dynamics in population A. 
-next.population <- timestep_deterministic_SIR(latest = tail(farm.df, 1), 
+#'Function for SIR model to calculate population dynamics in farms. 
+next.population.SIR.1 <- timestep_deterministic_SIR(latest = tail(farm.df.SIR.1, 1), 
                                               transmission.rate = FMD.transmission,
                                               recovery.rate = FMD.recovery,
                                               timestep=FMD.timesteps)
-next.population
+next.population.SIR.1
 
 #Proportion of susceptibles at equilibrium
-next.population[,c("susceptibles")]/num.farms
+next.population.SIR.1[,c("susceptibles")]/num.farms
 
-latest.population<-farm.df
-while (latest.population$time < end.time) {
-  latest.population <- timestep_deterministic_SIR(latest = latest.population,
+#' We use a while loop for the simulation, given that the timestep is already included. 
+#' We just need to give the simulation a stopping point, in this case the end.time. 
+latest.population.SIR.1<-farm.df.SIR.1
+while (latest.population.SIR.1$time < end.time) {
+  latest.population.SIR.1 <- timestep_deterministic_SIR(latest = latest.population.SIR.1,
                                                   transmission.rate = FMD.transmission, 
                                                   recovery.rate = FMD.recovery, 
                                                   timestep = FMD.timesteps)
-  farm.df <- rbind(farm.df, latest.population) 
+  farm.df.SIR.1 <- rbind(farm.df.SIR.1, latest.population.SIR.1) 
 }
 
-farm.df
 
-#' Plot the results with timesteps against the population in the data frame farm.df
+#' Plot the results 
+plot_populations(farm.df.SIR.1,col = c("green", "red", "black"))
 
-plot_populations(farm.df,col = c("green", "red", "black"))
-
-#' # Comparing SIR done above and SIS models with same R0
+#' ## SIS model
 #' 
 #' 
 #' 
-FMD.transmission <-2
-FMD.recovery <-1/2
-start.time <- 0
-end.time <- 50
 
-FMD.timesteps <-  0.5
-
-#R0 for simulation A. `r ecoli.transmission.a / ecoli.recovery.a`
-R0<- FMD.transmission / FMD.recovery
-
-
+# Dataframe for SIS model (doesn't have the recovered population)
 farm.df.SIS<- data.frame(time=start.time, 
                        susceptibles = initial.susceptibles, 
                        infecteds=initial.infecteds)
 
 farm.df.SIS
 
-#'Function for SIS model to calculate population dynamics in population A. 
+#'Function for SIS model to calculate population. 
 next.population.SIS <- timestep_deterministic_SIS(latest = tail(farm.df.SIS, 1), 
                                                 transmission.rate = FMD.transmission,
                                                 recovery.rate = FMD.recovery,
@@ -128,12 +124,8 @@ next.population.SIS
 #Proportion of susceptibles at equilibrium
 next.population.SIS[,c("susceptibles")]/num.farms
 
-#' Setting start and end time to make a sequence and call it timesteps.
-#' This time is in weeks. 
 
-
-#' Then make a loop with timesteps created above, to calculate susceptible and infected cattle in different weeks.
-#' And finally bind the data frames herd.df.a and next.population.a into one. 
+#' We use the same while loop as the SIR model above, with the proper changes for an SIS model.
 #' 
 latest.population.SIS<-farm.df.SIS
 while (latest.population.SIS$time < end.time) {
@@ -145,15 +137,14 @@ while (latest.population.SIS$time < end.time) {
 }
 
 
-#' Plot the results with timesteps against the population in the data frame herd.df.a
-
+#' Plot the results 
 plot_populations(farm.df.SIS,col = c("green", "red"))
 
 #' Plotting SIS and SIR model together to see the differences
 #' 
 #' 
-plot_populations(farm.df,col = c("green", "red", "black"))
-plot_populations(farm.df.SIS, new.graph=FALSE, col = c("green", "red"))
+plot_populations(farm.df.SIR.1,col = c("green", "red", "black"))
+plot_populations(farm.df.SIS, new.graph=FALSE, col = c("green", "red"), lty=2)
 
 #' # Comparing SIR done above with a different R0
 #' 
@@ -161,46 +152,46 @@ plot_populations(farm.df.SIS, new.graph=FALSE, col = c("green", "red"))
 # Transmission and recovery rate of E. coli O157 for simulation A
 FMD.transmission.2 <-1/4
 FMD.recovery.2 <-1/2
-start.time <- 0
-end.time <- 50
-          
-FMD.timesteps <-  0.5
           
 #R0 for simulation A. `r ecoli.transmission.a / ecoli.recovery.a`
 R0.2<- FMD.transmission / FMD.recovery
+R0.2
           
 #Inverted R0
 1/R0.2
           
 ## Data frame for cattle population in population A
-farm.df.2<- data.frame(time=start.time, 
+farm.df.SIR.2<- data.frame(time=start.time, 
                       susceptibles = initial.susceptibles, 
                       infecteds=initial.infecteds,
                       recovereds=initial.recovereds)
           
-farm.df.2
+farm.df.SIR.2
         
 #'Function for SIR model to calculate population dynamics in population A. 
-next.population.2 <- timestep_deterministic_SIR(latest = tail(farm.df.2, 1), 
+next.population.SIR.2 <- timestep_deterministic_SIR(latest = tail(farm.df.SIR.2, 1), 
                                                         transmission.rate = FMD.transmission.2,
                                                         recovery.rate = FMD.recovery.2,
                                                         timestep=FMD.timesteps)
-next.population.2
+next.population.SIR.2
           
 #Proportion of susceptibles at equilibrium
-next.population.2[,c("susceptibles")]/num.farms
+next.population.SIR.2[,c("susceptibles")]/num.farms
           
-latest.population.2<-farm.df.2
-while (latest.population.2$time < end.time) {
-      latest.population.2 <- timestep_deterministic_SIR(latest = latest.population.2,
+latest.population.SIR.2<-farm.df.SIR.2
+while (latest.population.SIR.2$time < end.time) {
+      latest.population.SIR.2 <- timestep_deterministic_SIR(latest = latest.population.SIR.2,
                                                           transmission.rate = FMD.transmission.2, 
                                                           recovery.rate = FMD.recovery.2, 
                                                           timestep = FMD.timesteps)
-        farm.df.2 <- rbind(farm.df.2, latest.population.2) 
+        farm.df.SIR.2 <- rbind(farm.df.SIR.2, latest.population.SIR.2) 
       }
-          
-      farm.df.2
-          
-#' Plot the results with timesteps against the population in the data frame farm.df
-plot_populations(farm.df.2,new.graph=TRUE,col = c("green", "red", "black"))     
-plot_populations(farm.df,new.graph=FALSE,col = c("green", "red", "black"))
+        
+  
+#' Plot the results
+plot_populations(farm.df.SIR.1,new.graph=TRUE,col = c("green", "red", "black"))     
+      
+              
+#' Plot the results of both SIR models.
+plot_populations(farm.df.SIR.1,new.graph=TRUE,col = c("green", "red", "black"))     
+plot_populations(farm.df.SIR.2,new.graph=FALSE,col = c("green", "red", "black"), lty=2)

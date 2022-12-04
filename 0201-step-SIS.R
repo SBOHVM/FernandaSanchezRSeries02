@@ -1,38 +1,37 @@
 #' ---
-#' title: "Simple birth-death difference equation model"
-#' author: "Richard Reeve"
+#' title: "Susceptible-Infected-Susceptible (SIS) model"
+#' author: "Fernanda Sánchez"
 #' date: '`r format(Sys.Date(), "%B %d %Y")`'
 #' output: html_document
 #' ---
 
+#' A Susceptible-Infected-Susceptible (SIS) model
+#'
+#'
+#' Arguments:
+#'
+#' - latest -- a data frame containing the latest susceptible and infected population count
+#'             (columns are 'susceptibles' and 'infecteds')
+#'
+#' - transmission.rate -- the transmission rate
+#'
+#' - recovery.rate -- the recovery rate
+#'
+#' Returns:
+#'
+#' - a data.frame containing the updated susceptible and infected population
 
 step_deterministic_SIS <- function(latest, transmission.rate, recovery.rate) {
-  #' A simple deterministic exponential birth-death model
-  #'
-  #' Run one step of a simple deterministic exponential birth-death model
-  #'
-  #' Arguments:
-  #'
-  #' - latest -- a data frame containing the latest population count
-  #'             (column is 'count')
-  #'
-  #' - birth.rate -- the birth rate
-  #'
-  #' - death.rate -- the death rate
-  #'
-  #' Returns:
-  #'
-  #' - a data.frame containing the updated population
-  
+
   ## Calculate population changes
   population.size<-latest$susceptibles+ latest$infecteds
-  new.recovered <- recovery.rate * latest$infected
-  new.infected <- transmission.rate * ((latest$susceptibles*latest$infected)/population.size)
+  new.recovered <- recovery.rate * latest$infecteds
+  new.infected <- transmission.rate * ((latest$susceptibles*latest$infecteds)/population.size)
   
   next.susceptibles <- latest$susceptibles - new.infected + new.recovered
   next.infecteds <- latest$infecteds + new.infected- new.recovered
   
-  ## Return data frame containing next population count
+  ## Return data frame containing next population
   data.frame(susceptibles = next.susceptibles, 
              infecteds=next.infecteds)
 }
@@ -42,7 +41,7 @@ step_deterministic_SIS <- function(latest, transmission.rate, recovery.rate) {
 
 
 
-#' #### Does the function works without any external (global) information?
+#' #### Does the function work without any external (global) information?
 
 library(codetools)
 if (length(findGlobals(step_deterministic_SIS,

@@ -1,5 +1,5 @@
 #' ---
-#' title: "Simple SIS model"
+#' title: "Simple SIS model, changing timesteps manually"
 #' author: "Fernanda Sánchez"
 #' date: '`r format(Sys.Date(), "%B %d %Y")`'
 #' output: html_document
@@ -28,11 +28,6 @@ source("0201-step-SIS.R")
 
 #'The same procedure will be done for simulations 1, 2, 3 and 4. 
 #'We only change the timesteps. We used the currently stated transmission and recovery rates for E. coli O157, 1 and 1/3, respectively.
-#'Start and end time are the same for all simulations. 
-#'
-#'
-
-#'These transmission and recovery rates are the currently stated for E. coli O157 in cattle.
 #'
 #'
 
@@ -50,10 +45,11 @@ initial.susceptibles <- num.cattle-initial.infecteds
 ecoli.transmission<-1
 ecoli.recovery<-1/3
 
-#R0 for simulation D
+#R0 for all simulations
 R0<-ecoli.transmission/ecoli.recovery
+R0
 
-#Inverse R0.1
+#Inverse R0
 1/R0
 
 # Start and end time of timesteps
@@ -88,12 +84,14 @@ for (new.time in timesteps1) {
 }
 
 
-#' Plot the results
+#' Plot the results for simulation 1. 
+#' 
+#' It can be seen that the model shows to be reliable with a timestep of 1 and shows no instabilities. 
 herd.df.1$time <- c(start.time, timesteps1)
 plot_populations(herd.df.1,col = c("green", "red"))
 
 #' ## Timestep of 0.1 weeks
-#' The plot between a timestep of 1 and 0.1 are not different, which tells us that there is no advantage to reducing the timestep lower than 1. 
+#' 
 #' 
 
 # Data frame for cattle population
@@ -118,12 +116,14 @@ for (new.time in timesteps2) {
 }
 
 
-#' Plot the results
+#' Plot the results for simulation 2.
+#' 
+#' The plot between a timestep of 1 and 0.1 are not different, which tells us that there is no advantage to reducing the timestep lower than 1. 
 herd.df.2$time <- c(start.time, timesteps2)
 plot_populations(herd.df.2,col = c("green", "red"))
 
 #' ## Timestep of 3 weeks
-#' It can be seen that with a higher timestep, the model becomes unstable and the simulation is not reliable.
+#' 
 #' 
 # Data frame for cattle population
 herd.df.3 <- data.frame(susceptibles = initial.susceptibles, 
@@ -147,15 +147,19 @@ for (new.time in timesteps3) {
 }
 
 
-#' Plot the results
+#' Plot the results for simulation 3.
+#' 
+#' It can be seen that with a higher timestep, the model becomes unstable and the simulation is not reliable.
+#' It shows erratic curves before the equilibrium, and the are sharp spikes after the equilibrium.
+#' This model is not accurate, therefore we shouldn't use timesteps that are higher than 1.
+
 herd.df.3$time <- c(start.time, timesteps3)
 plot_populations(herd.df.3,col = c("green", "red"))
 
 
 #' ## Timestep of 5 weeks
-#' It can be seen that with an even higher timestep the model is highly unstable. 
-#' The simulation ends earlier than expected, that's why we need to specify a y axis limit in the plot to be able to print a plot.
 #' 
+#'  
 # Data frame for cattle population
 herd.df.4 <- data.frame(susceptibles = initial.susceptibles, 
                         infecteds=initial.infecteds)
@@ -163,7 +167,7 @@ herd.df.4 <- data.frame(susceptibles = initial.susceptibles,
 #' Setting the timestep to 5. 
 #' We use the same sequence as the first simulation, we only changed the timestep. 
 
-timestep4<-3
+timestep4<-5
 timesteps4 <- seq(from = start.time + timestep4, to = end.time, by=timestep4)
 
 #' Loop created with the sequence timestep above and also multiplying the ecoli.transmission and ecoli.recovery by the timestep of our choice (in this case 5).
@@ -177,6 +181,11 @@ for (new.time in timesteps4) {
   herd.df.4 <- rbind(herd.df.4, next.population.4)
 }
 
-#' Plot the results
+#' Plot the results for simulation 4.
+#' 
+#' It can be seen that with an even higher timestep the model is highly unstable. 
+#' The simulation ends earlier than expected, that's why we need to specify a y axis limit in the plot to be able to print a plot.
+#' Proving once again that the higher the timestep, the more unreliable and accurate the model is. 
+
 herd.df.4$time <- c(start.time, timesteps4)
 plot_populations(herd.df.4,col = c("green", "red"), ylim=c(0,100))

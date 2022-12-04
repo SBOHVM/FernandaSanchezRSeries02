@@ -1,5 +1,5 @@
 #' ---
-#' title: "Susceptible-Infected-Susceptible (SIS) model"
+#' title: "Susceptible-Infected-Susceptible (SIS) model, with timestep included"
 #' author: "Fernanda Sánchez"
 #' date: '`r format(Sys.Date(), "%B %d %Y")`'
 #' output: html_document
@@ -10,7 +10,7 @@
 #'
 #' Arguments:
 #'
-#' - latest -- a data frame containing the latest susceptible and infected population count
+#' - latest -- a data frame containing the latest susceptible and infected population count, as well as the time
 #'             (columns are 'susceptibles', 'infecteds' and 'time')
 #'
 #' - transmission.rate -- the transmission rate
@@ -36,7 +36,7 @@ timestep_deterministic_SIS <- function(latest, transmission.rate, recovery.rate,
   next.susceptibles <- latest$susceptibles - new.infected + new.recovered
   next.infecteds <- latest$infecteds + new.infected- new.recovered
   
-  ## Return data frame containing next population and time related to the timestep
+  ## Return data frame containing next population and time
   data.frame(susceptibles = next.susceptibles, 
              infecteds=next.infecteds,
              time=latest$time+timestep)
