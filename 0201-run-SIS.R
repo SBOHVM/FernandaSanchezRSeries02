@@ -87,6 +87,9 @@ for (new.time in timesteps) {
 prop.population.a<-tail(herd.df.a,1)
 prop.population.a[,c("susceptibles")]/num.cattle
 
+#' **Plot of the results**
+#' 
+#' 
 #' We first need to plot the results with timesteps against the population in the data frame herd.df.a
 #' 
 #' 
@@ -137,8 +140,10 @@ for (new.time in timesteps) {
 prop.population.b<-tail(herd.df.b,1)
 prop.population.b[,c("susceptibles")]/num.cattle
 
-#' Plot of the results for simulation B= 
-#' as mentioned before, the disease is not able to cause an outbreak given that the transmission rate is lower than the recovery rate. 
+#' **Plot of the results**
+#' 
+#' 
+#' As mentioned before, the disease is not able to cause an outbreak given that the transmission rate is lower than the recovery rate. 
 #' Therefore, the infected population decreases very quickly and after a few weeks, the entire population is susceptible again.
 herd.df.b$time <- c(start.time, timesteps)
 plot_populations(herd.df.b,col = c("green", "red"))
@@ -186,8 +191,10 @@ for (new.time in timesteps) {
 prop.population.c<-tail(herd.df.c,1)
 prop.population.c[,c("susceptibles")]/num.cattle
 
-#' Plot of the results:
-#' we have a similar plot as simulation B, meaning that even when R0 is 1 the disease is not able to maintain itself in this population,
+#' **Plot of the results**
+#' 
+#' 
+#' We have a similar plot as simulation B, meaning that even when R0 is 1 the disease is not able to maintain itself in this population,
 #' therefore, there will not be an outbreak of this disease in this scenario.
 #' 
 herd.df.c$time <- c(start.time, timesteps)
@@ -235,8 +242,10 @@ for (new.time in timesteps) {
 prop.population.d<-tail(herd.df.d,1)
 prop.population.d[,c("susceptibles")]/num.cattle
 
-#' Plot of the results:
-#' it can be seen, as mentioned before that there's an equilibrium of susceptibles and infecteds when the susceptible population reaches approximately 33.
+#' **Plot of the results**
+#' 
+#' 
+#' It can be seen, as mentioned before that there's an equilibrium of susceptibles and infecteds when the susceptible population reaches approximately 33.
 #' In this case the infected population after a few weeks will be greater than the susceptible population. 
 #' This is because the transmission rate is bigger than the recovery rate (making R0 bigger than 1).
 #' Therefore, in this case, E. coli is able to cause an outbreak. 

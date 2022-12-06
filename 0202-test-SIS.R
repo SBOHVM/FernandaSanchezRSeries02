@@ -85,7 +85,7 @@ for (new.time in timesteps1) {
 }
 
 
-#' Plot the results for simulation 1. 
+#' **Plot the results for simulation 1.** 
 #' 
 #' It can be seen that the model shows to be reliable with a timestep of 1 and shows no instabilities. 
 herd.df.1$time <- c(start.time, timesteps1)
@@ -117,11 +117,29 @@ for (new.time in timesteps2) {
 }
 
 
-#' Plot the results for simulation 2.
+#' **Plot the results for simulation 2.**
 #' 
-#' The plot between a timestep of 1 and 0.1 are not different, which tells us that there is no advantage to reducing the timestep lower than 1. 
+#' 
+#' We can see a similar plot as for simulation 1.
+#' 
+
 herd.df.2$time <- c(start.time, timesteps2)
 plot_populations(herd.df.2,col = c("green", "red"))
+
+#' **Plots for simulation 1 and 2 together to see differences**
+#' 
+#' 
+#' The plot between a timestep of 1 and 0.1 are not significantly different, which tells us that there is no advantage to reducing the timestep lower than 1. 
+#'
+
+herd.df.1$time <- c(start.time, timesteps1)
+plot_populations(herd.df.1,col = c("green", "red"), with.legend = FALSE)
+herd.df.2$time <- c(start.time, timesteps2)
+plot_populations(herd.df.2,col = c("blue", "orange"), new.graph=FALSE, with.legend=FALSE, lty=2)
+
+legend("topright", legend = c("susceptible", "infected", "susceptible", "infected" ),
+       col = c("green", "red", "blue", "orange"), lty = c(1, 1, 2,2))
+
 
 #' ## Timestep of 3 weeks
 #' 
@@ -148,14 +166,30 @@ for (new.time in timesteps3) {
 }
 
 
-#' Plot the results for simulation 3.
+#' **Plot the results for simulation 3.**
+#' 
+#' 
+#' The plot looks unstable and less accurate.
+
+herd.df.3$time <- c(start.time, timesteps3)
+plot_populations(herd.df.3,col = c("green", "red"))
+
+
+#' **Plots for simulation 1 and 3 together to see differences**
+#' 
 #' 
 #' It can be seen that with a higher timestep, the model becomes unstable and the simulation is not reliable.
 #' It shows erratic curves before the equilibrium, and the are sharp spikes after the equilibrium.
 #' This model is not accurate, therefore we shouldn't use timesteps that are higher than 1.
 
+herd.df.1$time <- c(start.time, timesteps1)
+plot_populations(herd.df.1,col = c("green", "red"), with.legend = FALSE)
 herd.df.3$time <- c(start.time, timesteps3)
-plot_populations(herd.df.3,col = c("green", "red"))
+plot_populations(herd.df.3,col = c("blue", "orange"), new.graph=FALSE, lty=2)
+
+legend("topright", legend = c("susceptible", "infected", "susceptible", "infected" ),
+       col = c("green", "red", "blue", "orange"), lty = c(1, 1, 2,2))
+
 
 
 #' ## Timestep of 5 weeks
@@ -182,11 +216,27 @@ for (new.time in timesteps4) {
   herd.df.4 <- rbind(herd.df.4, next.population.4)
 }
 
-#' Plot the results for simulation 4.
+#' **Plot the results for simulation 4.**
+#' 
+#' With a higher timestep the model becomes more unstable
+
+herd.df.4$time <- c(start.time, timesteps4)
+plot_populations(herd.df.4,col = c("green", "red"), ylim=c(0,100))
+
+#' **Plots for simulation 1 and 4 together to see differences**
+#' 
 #' 
 #' It can be seen that with an even higher timestep the model is highly unstable. 
 #' The simulation ends earlier than expected, that's why we need to specify a y axis limit in the plot to be able to print it.
 #' Proving once again that the higher the timestep, the more unreliable and less accurate the model is. 
 
+
+herd.df.1$time <- c(start.time, timesteps1)
+plot_populations(herd.df.1,col = c("green", "red"), with.legend = FALSE)
 herd.df.4$time <- c(start.time, timesteps4)
-plot_populations(herd.df.4,col = c("green", "red"), ylim=c(0,100))
+plot_populations(herd.df.4,col = c("blue", "orange"), ylim=c(0,100), new.graph=FALSE, lty=2)
+
+legend("topright", legend = c("susceptible", "infected", "susceptible", "infected" ),
+       col = c("green", "red", "blue", "orange"), lty = c(1, 1, 2,2))
+
+
