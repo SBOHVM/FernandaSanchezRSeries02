@@ -13,21 +13,22 @@ source("0201-step-SIS.R")
 #' We are going to compare four Susceptible-Infected-Susceptible (SIS) models for E. coli O157 in cattle, with different week timesteps (1, 0.1, 3 and 5). 
 #'
 #' 1. Susceptible model
-### <b>
+#'
 #'    $$S(t + 1) = S(t)-\beta \times \frac{S(t)\times I(t)}{N} +\sigma \times I(t)$$
-### </b>
+#'
 #' 2. Infected model
-### <b>
+#'
 #'    $$I(t + 1) = S(t)+\beta \times \frac{S(t)\times I(t)}{N}-\sigma \times I(t)$$
-### </b>
+#'
 #' 3. N is a constant for total population
-### <b>
+#'
 #'    $$N = S(t)+ I(t)$$
-### </b>
+#'
 #'
 
-#'The same procedure will be done for simulations 1, 2, 3 and 4. 
-#'We only change the timesteps. We used the currently stated transmission and recovery rates for E. coli O157, 1 and 1/3, respectively.
+#' The same procedure will be done for simulations 1, 2, 3 and 4. 
+#' We only change the timesteps. 
+#' We used the currently stated transmission and recovery rates for E. coli O157, 1 and 1/3, respectively.
 #'
 #'
 
@@ -184,8 +185,8 @@ for (new.time in timesteps4) {
 #' Plot the results for simulation 4.
 #' 
 #' It can be seen that with an even higher timestep the model is highly unstable. 
-#' The simulation ends earlier than expected, that's why we need to specify a y axis limit in the plot to be able to print a plot.
-#' Proving once again that the higher the timestep, the more unreliable and accurate the model is. 
+#' The simulation ends earlier than expected, that's why we need to specify a y axis limit in the plot to be able to print it.
+#' Proving once again that the higher the timestep, the more unreliable and less accurate the model is. 
 
 herd.df.4$time <- c(start.time, timesteps4)
 plot_populations(herd.df.4,col = c("green", "red"), ylim=c(0,100))

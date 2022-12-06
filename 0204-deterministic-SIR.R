@@ -1,11 +1,11 @@
 #' ---
-#' title: "Susceptible-Infected-Susceptible (SIR) model"
+#' title: "Susceptible-Infected-Recovered (SIR) model"
 #' author: "Fernanda Sánchez"
 #' date: '`r format(Sys.Date(), "%B %d %Y")`'
 #' output: html_document
 #' ---
 
-#' A Susceptible-Infected-Susceptible (SIR) model
+#' A Susceptible-Infected-Recovered (SIR) model
 #'
 #'
 #' Arguments:

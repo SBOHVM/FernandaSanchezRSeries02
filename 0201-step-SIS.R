@@ -37,10 +37,6 @@ step_deterministic_SIS <- function(latest, transmission.rate, recovery.rate) {
 }
 
 
-
-
-
-
 #' #### Does the function work without any external (global) information?
 
 library(codetools)

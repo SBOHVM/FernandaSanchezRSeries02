@@ -13,17 +13,17 @@ source("0201-step-SIS.R")
 #' We are going to compare four Susceptible-Infected-Susceptible (SIS) models for E. coli O157 in cattle, with different basic reproduction numbers (R0). 
 #'
 #' 1. Susceptible model
-### <b>
+#'
 #'    $$S(t + 1) = S(t)-\beta \times \frac{S(t)\times I(t)}{N} +\sigma \times I(t)$$
-### </b>
+#'
 #' 2. Infected model
-### <b>
+#'
 #'    $$I(t + 1) = S(t)+\beta \times \frac{S(t)\times I(t)}{N}-\sigma \times I(t)$$
-### </b>
+#'
 #' 3. N is a constant for total population
-### <b>
+#'
 #'    $$N = S(t)+ I(t)$$
-### </b>
+#'
 #'
 
 #'The same procedure will be done for simulation A, B, C and D. 
@@ -69,13 +69,6 @@ herd.df.a<- data.frame(susceptibles = initial.susceptibles,
 next.population.a <- step_deterministic_SIS(latest = tail(herd.df.a, 1), 
                                           transmission.rate = ecoli.transmission.a,
                                           recovery.rate = ecoli.recovery.a)
-next.population.a
-
-#'Proportion of susceptibles at equilibrium according to the population size: 
-#'the disease reaches an equilibrium when half of the population is susceptible.
-#'This proportion is the same as the inverted R0, which is also the proportion of susceptibles according to R0. 
-#'
-next.population.a[,c("susceptibles")]/num.cattle
 
 #' Then make a loop with timesteps created above, to calculate susceptible and infected cattle in different weeks.
 #' And finally bind the data frames herd.df.a and next.population.a into one. 
@@ -87,15 +80,21 @@ for (new.time in timesteps) {
   herd.df.a <- rbind(herd.df.a, next.population.a)
 }
 
+#'Proportion of susceptibles at equilibrium according to the population size: 
+#'the disease reaches an equilibrium when half of the population is susceptible.
+#'This proportion is the same as the inverted R0, which is also the proportion of susceptibles according to R0. 
+#'
+prop.population.a<-tail(herd.df.a,1)
+prop.population.a[,c("susceptibles")]/num.cattle
 
-#' Plot the results with timesteps against the population in the data frame herd.df.a
+#' We first need to plot the results with timesteps against the population in the data frame herd.df.a
+#' 
 #' 
 #' It can be seen in this plot that there is an equilibrium when 50% of the population are susceptible.
 #' At this point, the number of susceptibles and infecteds will be the same.
 #' 
 herd.df.a$time <- c(start.time, timesteps)
 plot_populations(herd.df.a,col = c("green", "red"))
-
 
 
 #' ## Simulation B, where R0<1 (R=0.6)
@@ -119,14 +118,6 @@ herd.df.b <- data.frame(susceptibles = initial.susceptibles,
 next.population.b <- step_deterministic_SIS(latest = tail(herd.df.b, 1), 
                                           transmission.rate = ecoli.transmission.b,
                                           recovery.rate = ecoli.recovery.b)
-next.population.b
-
-#' Proportion susceptible at equilibrium according to the population size:
-#' in this case there is no equilibrium, given that 100% of the population stays susceptible,
-#' which matches the inverted R0 which is 1.67. 
-#' This is because R0 is less than 1 and the disease is not able to maintain itself in the population, therefore there will be no outbreak.
-#' 
-next.population.b[,c("susceptibles")]/num.cattle
 
 #' Same loop with timesteps created in simulation A, but for population B. 
 #
@@ -137,6 +128,14 @@ for (new.time in timesteps) {
   herd.df.b <- rbind(herd.df.b, next.population.b)
 }
 
+#' Proportion susceptible at equilibrium according to the population size:
+#' in this case there is an equilibrium, where 100% of the population stays susceptible. 
+#' The inverse R0 is greater than 1, which is because R0 is 0.6. But it still means that 100% of the population stays susceptible.
+#' Given that R0 is less than 1 and the disease is not able to maintain itself in the population, there will be no outbreak.
+#' 
+ 
+prop.population.b<-tail(herd.df.b,1)
+prop.population.b[,c("susceptibles")]/num.cattle
 
 #' Plot of the results for simulation B= 
 #' as mentioned before, the disease is not able to cause an outbreak given that the transmission rate is lower than the recovery rate. 
@@ -167,14 +166,6 @@ herd.df.c <- data.frame(susceptibles = initial.susceptibles,
 next.population.c <- step_deterministic_SIS(latest = tail(herd.df.c, 1), 
                                            transmission.rate = ecoli.transmission.c,
                                            recovery.rate = ecoli.recovery.c)
-next.population.c
-
-#' Proportion susceptible at equilibrium according to population size:
-#' this is very close to 1, which is the same concept as simulation B, where R0 was lower than 1 and the inverted R0 is 1.
-#' In this case the susceptible population is close to 100% given that the transmission and recovery rate are the same,
-#' meaning that the disease is no able to sustain itself in the population and there will not be an outbreak.
-#' 
-next.population.c[,c("susceptibles")]/num.cattle
 
 #' Same loop with timesteps created in simulation A, but for population C. 
 #
@@ -186,6 +177,14 @@ for (new.time in timesteps) {
   herd.df.c <- rbind(herd.df.c, next.population.c)
 }
 
+#' Proportion susceptible at equilibrium according to population size:
+#' this is very close to 1, which is the same concept as simulation B, where R0 was lower than 1 and the inverted R0 is 1.
+#' In this case the susceptible population is close to 100% given that the transmission and recovery rate are the same,
+#' meaning that the disease is no able to sustain itself in the population and there will not be an outbreak.
+#' 
+
+prop.population.c<-tail(herd.df.c,1)
+prop.population.c[,c("susceptibles")]/num.cattle
 
 #' Plot of the results:
 #' we have a similar plot as simulation B, meaning that even when R0 is 1 the disease is not able to maintain itself in this population,
@@ -218,14 +217,6 @@ herd.df.d <- data.frame(susceptibles = initial.susceptibles,
 next.population.d <- step_deterministic_SIS(latest = tail(herd.df.d, 1), 
                                             transmission.rate = ecoli.transmission.d,
                                             recovery.rate = ecoli.recovery.d)
-next.population.d
-
-#' Proportion susceptible at equilibrium according to population size:
-#' this proportion is the same as the inverse R0. 
-#' Which means there's an equilibrium when 33% of susceptibles are left in the population. 
-#' 
-
-next.population.d[,c("susceptibles")]/num.cattle
 
 #' Same loop with timesteps created in simulation A, but for population D. 
 #
@@ -236,12 +227,19 @@ for (new.time in timesteps) {
   herd.df.d <- rbind(herd.df.d, next.population.d)
 }
 
+#' Proportion susceptible at equilibrium according to population size:
+#' this proportion is the same as the inverse R0. 
+#' Which means there's an equilibrium when 33% of susceptibles are left in the population. 
+#' 
+
+prop.population.d<-tail(herd.df.d,1)
+prop.population.d[,c("susceptibles")]/num.cattle
 
 #' Plot of the results:
 #' it can be seen, as mentioned before that there's an equilibrium of susceptibles and infecteds when the susceptible population reaches approximately 33.
-#' In this case the infected population after a few weeks will be greater than the susceptible population, 
-#' this is because the transmission rate is bigger than the recovery rate (making R0 bigger than 1).
-#' Therefore, in this case, the E. coli is able to cause an outbreak. 
+#' In this case the infected population after a few weeks will be greater than the susceptible population. 
+#' This is because the transmission rate is bigger than the recovery rate (making R0 bigger than 1).
+#' Therefore, in this case, E. coli is able to cause an outbreak. 
 #' 
 herd.df.d$time <- c(start.time, timesteps)
 plot_populations(herd.df.d,col = c("green", "red"))
