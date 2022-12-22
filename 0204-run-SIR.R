@@ -19,11 +19,11 @@ source("0203-deterministic-SIS.R")
 #'
 #' 1. Susceptible model
 #'
-#'    $$S(t + 1) = S(t)-\beta \times ((S(t)\times I(t))/N)+\sigma \times I(t)$$
+#'    $$S(t + 1) = S(t)-\beta \times \frac{S(t)\times I(t)}{N}+\sigma \times I(t)$$
 #'
 #' 2. Infected model
 #'
-#'    $$I(t + 1) = S(t)+\beta \times ((S(t)\times I(t))/N)-\sigma \times I(t)$$
+#'    $$I(t + 1) = S(t)+\beta \times \frac{S(t)\times I(t)}{N}-\sigma \times I(t)$$
 #'
 #' 3. Recovered model
 #'
@@ -31,7 +31,7 @@ source("0203-deterministic-SIS.R")
 #'
 #' 4. N is a constant for total population
 #'
-#'    $$N = S(t)+ I(t)$$
+#'    $$N = S(t)+ I(t) + R(t)$$
 #'
 #'
 
