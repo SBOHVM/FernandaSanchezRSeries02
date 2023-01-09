@@ -202,7 +202,7 @@ plot_populations(farm.df.SIR.2,new.graph=TRUE,col = c("blue", "orange", "purple"
 #' 
 #' As previously mentioned before, the plot with an R0 of 4, was able to cause infection but when the population started to recover, the disease died out given that there weren't susceptibles left. 
 #' 
-#' When R0 is lower than 1, we see a similar scenario as with and SIS lower than 1 (as shown in practical 2.1).
+#' When R0 is lower than 1, we see a similar scenario as with an SIS lower than 1 (as shown in practical 2.1).
 #' Because the transmission rate is lower than the recovery rate, the disease dies out and is not able to cause an outbreak.
 #' So we see that the susceptible population stays close to 100 and the infected population close to zero. 
 #' The recovered population is also close to zero given that most farms didn't get infected, so there wasn't a disease to recover from. 

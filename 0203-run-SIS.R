@@ -60,8 +60,6 @@ end.time <- 100
 
 #' # Comparing models with a timestep of 1
 #' 
-#' It can be seen that both methods work the same and we get the same output. 
-#' 
 #' 
 #' ## Model with timestep outside of function
 #' 
@@ -141,9 +139,14 @@ legend("topright", legend = c("susceptible", "infected", "susceptible", "infecte
        col = c("green", "red", "blue", "orange"), lty = c(1, 1, 2,2))
 
 
-#' # Comparing models with a timestep of 3
+#' **Conclusion**
+#' 
 #' 
 #' It can be seen that both methods work the same and we get the same output. 
+#' 
+#' 
+
+#' # Comparing models with a timestep of 3
 #' 
 #' 
 #' ## Model with timestep outside of function
@@ -218,3 +221,10 @@ plot_populations(herd.df.d, new.graph= FALSE, col = c("blue", "orange"), lty=2, 
 
 legend("topright", legend = c("susceptible", "infected", "susceptible", "infected" ),
        col = c("green", "red", "blue", "orange"), lty = c(1, 1, 2,2))
+
+#' **Conclusion**
+#' 
+#' 
+#' It can be seen that both methods work the same and we get the same output. 
+#' 
+#' 
